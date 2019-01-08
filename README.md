@@ -1,4 +1,4 @@
-# Long Island Minecraft
+# Long Island Minecraft Server
 
 # Docker
 ```
