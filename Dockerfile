@@ -16,12 +16,12 @@ ADD ops.json ${MINECRAFT}/ops.json
 ADD server.properties ${MINECRAFT}/server.properties
 ADD plugins/EasyFly.jar ${MINECRAFT}/plugins
 ADD scriptcraft/modules/drone/cylinders.js ${SCRIPTCRAFT}/modules/drone/cylinders.js
+ADD scriptcraft/modules/dust.js ${SCRIPTCRAFT}/modules/dust.js
 ADD scriptcraft/plugins/block.js ${SCRIPTCRAFT}/plugins/block.js
 ADD scriptcraft/plugins/drone/contrib/boom.js ${SCRIPTCRAFT}/plugins/drone/contrib/boom.js
 ADD scriptcraft/plugins/drone/contrib/mob_grinder.js ${SCRIPTCRAFT}/plugins/drone/contrib/mob_grinder.js
 ADD scriptcraft/plugins/drone/contrib/secure_home.js ${SCRIPTCRAFT}/plugins/drone/contrib/secure_home.js
 ADD scriptcraft/plugins/drone/contrib/subway.js ${SCRIPTCRAFT}/plugins/drone/contrib/subway.js
-ADD scriptcraft/plugins/dust.js ${SCRIPTCRAFT}/plugins/dust.js
 ADD scriptcraft/plugins/greet.js ${SCRIPTCRAFT}/plugins/greet.js
 ADD scriptcraft/plugins/homes/homes.js ${SCRIPTCRAFT}/plugins/homes/homes.js
 ADD scriptcraft/plugins/inv.js ${SCRIPTCRAFT}/plugins/inv.js

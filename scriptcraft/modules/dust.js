@@ -2,12 +2,18 @@
 
 var Drone = require('drone');
 var blocks = require('blocks');
+var fireworks = require('fireworks');
 
 var _store = { players: {} };
 
+var _SPELLS = {
+  'EXCAVATE': 977779,
+  'SURVEY': 434,
+  'TP_SHIELD': 100,
+};
+
 var CURRENCY_CODE = 'DUST';
-var DECIMAL_DIGITS = 15;
-var TOTAL_SUPPLY = 100000;
+var DECIMAL_DIGITS = 2;
 
 // Total ore on server 209,910,713,595,060
 
@@ -72,6 +78,38 @@ var dust = plugin('dust', {
     );
   },
 
+  canCast: function (player, _spell, _times) {
+    var times = (_times === undefined) ? 1 : _times;
+    var cost = _SPELLS[_spell];
+
+    if (cost === undefined) {
+      return false;
+    }
+
+    if (this.store.players[player.name].balance >= (cost * times)) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  burn: function (player, _spell, _times) {
+    var times = (_times === undefined) ? 1 : _times;
+    var cost = _SPELLS[_spell];
+
+    if (!this.canCast(player, _spell, times)) {
+      echo('You need more dust to cast this spell.');
+      return false;
+    }
+
+    this.store.players[player.name].balance =
+      this.store.players[player.name].balance - (cost * times);
+
+    // fireworks.firework(player.location);
+
+    return true;
+  },
+
   prettyPrint: function (amount) {
     return (amount / Math.pow(10, DECIMAL_DIGITS)).toFixed(DECIMAL_DIGITS);
   },
@@ -96,21 +134,21 @@ function isOre( block ) {
 
   if (__plugin.bukkit){
     var bkMaterial = org.bukkit.Material;
-    if ( block.type.equals(bkMaterial.LAPIS_ORE) ||
-         block.type.equals(bkMaterial.COAL_ORE) ||
-         block.type.equals(bkMaterial.IRON_ORE) ||
-         block.type.equals(bkMaterial.REDSTONE_ORE) ||
-         block.type.equals(bkMaterial.GLOWING_REDSTONE_ORE) ||
-         block.type.equals(bkMaterial.EMERALD_ORE) ||
-         block.type.equals(bkMaterial.DIAMOND_ORE) ||
-         block.type.equals(bkMaterial.QUARTZ_ORE) ||
-	 block.type.equals(bkMaterial.GOLD_ORE) ) {
+    if (block.type.equals(bkMaterial.LAPIS_ORE) ||
+        block.type.equals(bkMaterial.COAL_ORE) ||
+        block.type.equals(bkMaterial.IRON_ORE) ||
+        block.type.equals(bkMaterial.REDSTONE_ORE) ||
+        block.type.equals(bkMaterial.GLOWING_REDSTONE_ORE) ||
+        block.type.equals(bkMaterial.EMERALD_ORE) ||
+        block.type.equals(bkMaterial.DIAMOND_ORE) ||
+        block.type.equals(bkMaterial.QUARTZ_ORE) ||
+	      block.type.equals(bkMaterial.GOLD_ORE) ) {
       return true;
-    } 
+    }
   }
 
   if (__plugin.canary){
-    if (block.typeId == blocks.lapis_lazuli_ore || 
+    if (block.typeId == blocks.lapis_lazuli_ore ||
         block.typeId == blocks.coal_ore ||
         block.typeId == blocks.iron_ore ||
         block.typeId == blocks.redstone_ore ||
@@ -119,8 +157,8 @@ function isOre( block ) {
         block.typeId == blocks.diamond_ore ||
         block.typeId == blocks.quartzore ||
         block.typeId == blocks.netherquartzore ||
-	block.typeId == blocks.gold_ore ) {
-	return true;
+	      block.typeId == blocks.gold_ore ) {
+	    return true;
     }
   }
 
@@ -133,7 +171,7 @@ function isBedrock( block ) {
     var bkMaterial = org.bukkit.Material;
     if ( block.type.equals(bkMaterial.BEDROCK) ) {
       return true;
-    } 
+    }
   }
 
   if (__plugin.canary){
@@ -148,8 +186,12 @@ function isBedrock( block ) {
 function survey(square) {
   var total = 0;
 
-  if (square === undefined) {
+  if (square === undefined || square > 20) {
     square = 1;
+  }
+
+  if (!dust.burn(self, 'SURVEY', square)) {
+    return;
   }
 
   for (var i = 0; i < square; i++) {
@@ -180,8 +222,12 @@ function survey(square) {
 }
 
 function excavate(square) {
-  if (square === undefined) {
+  if (square === undefined || square > 20) {
     square = 1;
+  }
+
+  if (!dust.burn(self, 'EXCAVATE', square)) {
+    return;
   }
 
   for (var i = 0; i < square; i++) {
@@ -214,4 +260,4 @@ Drone.extend(survey);
 
 events.blockBreak( blockBreak );
 
-exports.dust = dust;
+module.exports = dust;

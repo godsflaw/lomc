@@ -2,6 +2,7 @@ var utils = require('utils');
 var teleport = require('teleport');
 var inventory = require('inventory');
 var items = require('items');
+var dust = require('dust');
 
 //
 // to set the location of the teleport:
@@ -86,10 +87,9 @@ function has_shield(player) {
 }
 
 function cast_teleport(damager, damagee) {
-
-  if (has_cobblestone(damagee) && has_shield(damagee)) {
-    inventory(damagee)
-      .remove( items.cobblestone(2) );
+  if (has_shield(damagee) && dust.burn(damagee, 'TP_SHIELD')) {
+    // inventory(damagee)
+    //   .remove( items.cobblestone(2) );
     damager.teleport(utils.locationFromJSON(
       tp_shield_location.store.players[damagee.name].location
     ));
@@ -123,7 +123,7 @@ function tp_shield(event, cancel) {
     if (tp_shield_location.store.players[damagee.name] &&
         tp_shield_location.store.players[damagee.name].active &&
         tp_shield_location.store.players[damagee.name].location) {
-	cast_teleport(damager, damagee);
+	    cast_teleport(damager, damagee);
     }
   }
 }
