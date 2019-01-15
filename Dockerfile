@@ -29,8 +29,9 @@ ADD scriptcraft/plugins/inv.js ${SCRIPTCRAFT}/plugins/inv.js
 ADD scriptcraft/plugins/ravine.js ${SCRIPTCRAFT}/plugins/ravine.js
 ADD scriptcraft/plugins/tp_shield.js ${SCRIPTCRAFT}/plugins/tp_shield.js
 
-# install codebase
+# run commands after dropping codebase
 RUN echo "root:l0mc" | chpasswd
+RUN rm -f ${SCRIPTCRAFT}/plugins/dust.js
 
 # any ports we want to expose
 EXPOSE 25565
