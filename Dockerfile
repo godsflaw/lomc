@@ -31,7 +31,6 @@ ADD scriptcraft/plugins/tp_shield.js ${SCRIPTCRAFT}/plugins/tp_shield.js
 
 # run commands after dropping codebase
 RUN echo "root:l0mc" | chpasswd
-RUN rm -f ${SCRIPTCRAFT}/plugins/dust.js
 
 # any ports we want to expose
 EXPOSE 25565
