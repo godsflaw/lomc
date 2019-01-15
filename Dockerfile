@@ -15,6 +15,7 @@ ADD start /start
 ADD ops.json ${MINECRAFT}/ops.json
 ADD server.properties ${MINECRAFT}/server.properties
 ADD plugins/EasyFly.jar ${MINECRAFT}/plugins
+ADD plugins/NoFireworkDamage.jar ${MINECRAFT}/plugins
 ADD scriptcraft/modules/drone/cylinders.js ${SCRIPTCRAFT}/modules/drone/cylinders.js
 ADD scriptcraft/modules/dust.js ${SCRIPTCRAFT}/modules/dust.js
 ADD scriptcraft/plugins/block.js ${SCRIPTCRAFT}/plugins/block.js

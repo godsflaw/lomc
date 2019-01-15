@@ -118,6 +118,9 @@ function tp_shield(event, cancel) {
         damagerType === 'LLAMA_SPIT' ||
         damagerType === 'SPLASH_POTION') {
       damager = damager.getShooter();
+    } else if (damagerType === 'FIREWORK') {
+      // ignore
+      return;
     }
 
     if (tp_shield_location.store.players[damagee.name] &&

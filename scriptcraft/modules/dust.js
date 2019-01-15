@@ -29,6 +29,10 @@ var LAPIS_REWARD = 435375;     // 0.000000000435375
 // (14062485000004 chunks) * (8.2 generation rate) = 115,312,377,000,033 (55%) -> (1%)
 var GOLD_REWARD = 8672;        // 0.000000000008672
 
+var randInt = function(num) {
+  return Math.floor(Math.random() * num);
+};
+
 var dust = plugin('dust', {
 
   reward: function (block) {
@@ -105,7 +109,12 @@ var dust = plugin('dust', {
     this.store.players[player.name].balance =
       this.store.players[player.name].balance - (cost * times);
 
-    // fireworks.firework(player.location);
+    var fx = ((times * cost)/100 < 20) ? (times * cost)/100 : 20;
+    for (var i = 0; i < fx; i++) {
+      setTimeout(function() {
+        fireworks.firework(player.location);
+      }, randInt(2000));
+    }
 
     return true;
   },
