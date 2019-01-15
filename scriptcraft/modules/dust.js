@@ -35,7 +35,7 @@ var randInt = function(num) {
 
 var dust = plugin('dust', {
 
-  reward: function (block) {
+  reward: function(block) {
     var reward = 0;
 
     switch(block.getType().toString()) {
@@ -60,7 +60,7 @@ var dust = plugin('dust', {
     return reward;
   },
 
-  found: function (player, block) {
+  found: function(player, block) {
     var reward = this.reward(block);
 
     if (reward > 0) {
@@ -74,15 +74,15 @@ var dust = plugin('dust', {
     }
   },
 
-  balance: function () {
-    echo(
+  printBalance: function(player) {
+    player.sendMessage(
       'your balance is: ' +
-      this.prettyPrint(this.store.players[self.name].balance) +
+      this.prettyPrint(this.store.players[player.name].balance) +
       ' ' + CURRENCY_CODE
     );
   },
 
-  canCast: function (player, _spell, _times) {
+  canCast: function(player, _spell, _times) {
     var times = (_times === undefined) ? 1 : _times;
     var cost = _SPELLS[_spell];
 
@@ -97,7 +97,7 @@ var dust = plugin('dust', {
     }
   },
 
-  burn: function (player, _spell, _times) {
+  burn: function(player, _spell, _times) {
     var times = (_times === undefined) ? 1 : _times;
     var cost = _SPELLS[_spell];
 
@@ -119,7 +119,7 @@ var dust = plugin('dust', {
     return true;
   },
 
-  prettyPrint: function (amount) {
+  prettyPrint: function(amount) {
     return (amount / Math.pow(10, DECIMAL_DIGITS)).toFixed(DECIMAL_DIGITS);
   },
 
@@ -151,7 +151,7 @@ function isOre( block ) {
         block.type.equals(bkMaterial.EMERALD_ORE) ||
         block.type.equals(bkMaterial.DIAMOND_ORE) ||
         block.type.equals(bkMaterial.QUARTZ_ORE) ||
-	      block.type.equals(bkMaterial.GOLD_ORE) ) {
+        block.type.equals(bkMaterial.GOLD_ORE) ) {
       return true;
     }
   }
@@ -166,8 +166,8 @@ function isOre( block ) {
         block.typeId == blocks.diamond_ore ||
         block.typeId == blocks.quartzore ||
         block.typeId == blocks.netherquartzore ||
-	      block.typeId == blocks.gold_ore ) {
-	    return true;
+        block.typeId == blocks.gold_ore ) {
+      return true;
     }
   }
 
@@ -185,21 +185,21 @@ function isBedrock( block ) {
 
   if (__plugin.canary){
     if (block.typeId == blocks.bedrock ) {
-	return true;
+      return true;
     }
   }
 
   return false;
 }
 
-function survey(square) {
+Drone.extend(function survey(player, square) {
   var total = 0;
 
   if (square === undefined || square > 20) {
     square = 1;
   }
 
-  if (!dust.burn(self, 'SURVEY', square)) {
+  if (!dust.burn(player, 'SURVEY', square)) {
     return;
   }
 
@@ -227,15 +227,15 @@ function survey(square) {
     this.fwd();
   }
 
-  echo('contains ' + dust.prettyPrint(total) + ' ' + CURRENCY_CODE);
-}
+  player.sendMessage('contains ' + dust.prettyPrint(total) + ' ' + CURRENCY_CODE);
+});
 
-function excavate(square) {
+Drone.extend(function excavate(player, square) {
   if (square === undefined || square > 20) {
     square = 1;
   }
 
-  if (!dust.burn(self, 'EXCAVATE', square)) {
+  if (!dust.burn(player, 'EXCAVATE', square)) {
     return;
   }
 
@@ -262,10 +262,27 @@ function excavate(square) {
     this.move('top_i');
     this.fwd();
   }
-}
+});
 
-Drone.extend(excavate);
-Drone.extend(survey);
+command('dust', function(params, sender) {
+  var option = params[0];
+  var square = params[1] || 1;
+
+  if (option === 'balance') {
+    dust.printBalance(sender);
+  } else if (option === 'survey') {
+    var drone = new Drone(sender);
+    drone.survey(sender, square);
+  } else if (option === 'excavate') {
+    var drone = new Drone(sender);
+    drone.excavate(sender, square);
+  } else {
+    sender.sendMessage(option + ' is not a valid option (balance|survey|excavate)');
+    sender.sendMessage('balance: print your DUST balance');
+    sender.sendMessage('survey <square>: how much DUST is in this square area');
+    sender.sendMessage('excavate <square>: remove all non-ore blocks down to bedrock');
+  }
+});
 
 events.blockBreak( blockBreak );
 

@@ -17,51 +17,50 @@ var _store = { players: {} };
 
 var tp_shield_location = plugin('tp_shield_location', {
 
-  setTeleportLocation: function (player) {
+  plumbTeleportLocation: function(player) {
     if (this.store.players[player.name] === undefined) {
       this.store.players[player.name] = {
         active: false,
         location: utils.locationToJSON(utils.getMousePos(player))
       }
-    } else {
-      this.store.players[player.name].location =
-        utils.locationToJSON(utils.getMousePos(player));
+
+      player.sendMessage('teleport shield configured');
     }
+  },
+
+  setTeleportLocation: function(player) {
+    this.plumbTeleportLocation(player);
+
+    this.store.players[player.name].location =
+      utils.locationToJSON(utils.getMousePos(player));
 
     player.sendMessage('set teleport shield location');
   },
 
-  setTeleportLocationOn: function (player) {
-    if (this.store.players[player.name] === undefined) {
-      this.setTeleportLocation(player);
-    }
-
+  teleportLocationOn: function(player) {
+    this.plumbTeleportLocation(player);
     this.store.players[player.name].active = true;
     player.sendMessage('teleport shield active');
   },
 
-  setTeleportLocationOff: function (player) {
-    if (this.store.players[player.name] === undefined) {
-      this.setTeleportLocation(player);
-    } else {
-      this.store.players[player.name].active = false;
-    }
-
+  teleportLocationOff: function(player) {
+    this.plumbTeleportLocation(player);
+    this.store.players[player.name].active = false;
     player.sendMessage('teleport shield inactive');
   },
 
   store: _store
 }, true);
 
-command('tp_shield', function (params, sender) {
+command('tp_shield', function(params, sender) {
   var option = params[0];
 
   if (option === 'set'){
     tp_shield_location.setTeleportLocation(sender);
   } else if (option === 'on'){
-    tp_shield_location.setTeleportLocationOn(sender);
+    tp_shield_location.teleportLocationOn(sender);
   } else if (option === 'off'){
-    tp_shield_location.setTeleportLocationOff(sender);
+    tp_shield_location.teleportLocationOff(sender);
   } else {
     sender.sendMessage(option + ' is not a valid option (set|on|off)');
   }
@@ -118,9 +117,12 @@ function tp_shield(event, cancel) {
         damagerType === 'LLAMA_SPIT' ||
         damagerType === 'SPLASH_POTION') {
       damager = damager.getShooter();
-    } else if (damagerType === 'FIREWORK') {
+    } else if (damagerType === 'FIREWORK' ||
+               damagerType === 'CREEPER') {
       // ignore
       return;
+    } else {
+      console.log('unknown damagerType: ' + damagerType);
     }
 
     if (tp_shield_location.store.players[damagee.name] &&
@@ -135,7 +137,7 @@ events.entityDamageByEntity( tp_shield );
 
 function tp_add_player(event, cancel) {
   var player = event.getPlayer();
-  tp_shield_location.setTeleportLocationOff(player);
+  tp_shield_location.plumbTeleportLocation(player);
 }
 
 events.playerJoin( tp_add_player );
