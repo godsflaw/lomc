@@ -7,9 +7,9 @@ var fireworks = require('fireworks');
 var _store = { players: {} };
 
 var _SPELLS = {
-  'EXCAVATE': 977779,
-  'SURVEY': 434,
-  'TP_SHIELD': 100,
+  'EXCAVATE':    146667,       //      1466.67 DUST
+  'SURVEY':        3616,       //        36.16 DUST
+  'TP_SHIELD':    10000,       //       100.00 DUST
 };
 
 var CURRENCY_CODE = 'DUST';
@@ -18,16 +18,16 @@ var DECIMAL_DIGITS = 2;
 // Total ore on server 209,910,713,595,060
 
 // (14062485000004 chunks) * (0.2 generation rate) = 2,812,497,000,001 (1%) -> (55%)
-var EMERALD_REWARD = 19555576; // 0.000000019555576
+var EMERALD_REWARD = 19555576; // 195,555.76
 
 // (14062485000004 chunks) * (3.097 generation rate) = 43,551,516,045,012 (21%) -> (23%)
-var DIAMOND_REWARD = 482188;   // 0.000000000482188
+var DIAMOND_REWARD = 482188;   //   4,821.88
 
 // (14062485000004 chunks) * (3.43 generation rate) = 48,234,323,550,014 (23%) -> (21%)
-var LAPIS_REWARD = 435375;     // 0.000000000435375
+var LAPIS_REWARD = 435375;     //   4,353.75
 
 // (14062485000004 chunks) * (8.2 generation rate) = 115,312,377,000,033 (55%) -> (1%)
-var GOLD_REWARD = 8672;        // 0.000000000008672
+var GOLD_REWARD = 8672;        //      86.72
 
 var randInt = function(num) {
   return Math.floor(Math.random() * num);
@@ -109,7 +109,8 @@ var dust = plugin('dust', {
     this.store.players[player.name].balance =
       this.store.players[player.name].balance - (cost * times);
 
-    var fx = ((times * cost)/100 < 20) ? (times * cost)/100 : 20;
+    var fx = ((times * cost)/_SPELLS['TP_SHIELD'] < 20) ?
+      (times * cost)/_SPELLS['TP_SHIELD'] : 20;
     for (var i = 0; i < fx; i++) {
       setTimeout(function() {
         fireworks.firework(player.location);
@@ -195,11 +196,13 @@ function isBedrock( block ) {
 Drone.extend(function survey(player, square) {
   var total = 0;
 
-  if (square === undefined || square > 20) {
+  if (square === undefined) {
     square = 1;
+  } else if(square > 20) {
+    square = 20;
   }
 
-  if (!dust.burn(player, 'SURVEY', square)) {
+  if (!dust.burn(player, 'SURVEY', square * square)) {
     return;
   }
 
@@ -227,15 +230,27 @@ Drone.extend(function survey(player, square) {
     this.fwd();
   }
 
-  player.sendMessage('contains ' + dust.prettyPrint(total) + ' ' + CURRENCY_CODE);
+  var excavationCost = _SPELLS['EXCAVATE'] * (square * square);
+
+  player.sendMessage(
+    'contains: ' + dust.prettyPrint(total) + ' ' + CURRENCY_CODE
+  );
+  player.sendMessage(
+    'excavation cost: ' + dust.prettyPrint(excavationCost) + ' ' + CURRENCY_CODE
+  );
+  player.sendMessage(
+    'profit: ' + dust.prettyPrint(total - excavationCost) + ' ' + CURRENCY_CODE
+  );
 });
 
 Drone.extend(function excavate(player, square) {
-  if (square === undefined || square > 20) {
+  if (square === undefined) {
     square = 1;
+  } else if(square > 20) {
+    square = 20;
   }
 
-  if (!dust.burn(player, 'EXCAVATE', square)) {
+  if (!dust.burn(player, 'EXCAVATE', square * square)) {
     return;
   }
 
