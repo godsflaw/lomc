@@ -7,9 +7,10 @@ var fireworks = require('fireworks');
 var _store = { players: {} };
 
 var _SPELLS = {
-  'EXCAVATE':    146667,       //      1466.67 DUST
-  'SURVEY':        3616,       //        36.16 DUST
-  'TP_SHIELD':    10000,       //       100.00 DUST
+  'GARDEN_HOUSE': 1000000000,   //   10,000,000.00 DUST
+  'EXCAVATE':         146667,   //        1,466.67 DUST
+  'SURVEY':             3616,   //           36.16 DUST
+  'TP_SHIELD':         10000,   //          100.00 DUST
 };
 
 var CURRENCY_CODE = 'DUST';

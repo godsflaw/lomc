@@ -3,6 +3,12 @@
     "uuid": "e27a6457-033c-403d-b0b3-3a16539245d1",
     "name": "godsflaw",
     "level": 4,
-    "bypassesPlayerLimit": false
+    "bypassesPlayerLimit": true
+  },
+  {
+    "uuid": "6c79bc68-1a4a-4840-a9b3-e7da4c6a16a0",
+    "name": "chudke",
+    "level": 4,
+    "bypassesPlayerLimit": true
   }
 ]

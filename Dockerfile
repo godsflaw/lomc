@@ -20,6 +20,7 @@ ADD scriptcraft/modules/drone/cylinders.js ${SCRIPTCRAFT}/modules/drone/cylinder
 ADD scriptcraft/modules/dust.js ${SCRIPTCRAFT}/modules/dust.js
 ADD scriptcraft/plugins/block.js ${SCRIPTCRAFT}/plugins/block.js
 ADD scriptcraft/plugins/drone/contrib/boom.js ${SCRIPTCRAFT}/plugins/drone/contrib/boom.js
+ADD scriptcraft/plugins/drone/contrib/garden_house.js ${SCRIPTCRAFT}/plugins/drone/contrib/garden_house.js
 ADD scriptcraft/plugins/drone/contrib/mob_grinder.js ${SCRIPTCRAFT}/plugins/drone/contrib/mob_grinder.js
 ADD scriptcraft/plugins/drone/contrib/secure_home.js ${SCRIPTCRAFT}/plugins/drone/contrib/secure_home.js
 ADD scriptcraft/plugins/drone/contrib/subway.js ${SCRIPTCRAFT}/plugins/drone/contrib/subway.js
