@@ -103,7 +103,7 @@ var dust = plugin('dust', {
     var cost = _SPELLS[_spell];
 
     if (!this.canCast(player, _spell, times)) {
-      echo('You need more dust to cast this spell.');
+      player.sendMessage('You need more dust to cast this spell.');
       return false;
     }
 
