@@ -24,10 +24,8 @@ ADD scriptcraft/plugins/drone/contrib/garden_house.js ${SCRIPTCRAFT}/plugins/dro
 ADD scriptcraft/plugins/drone/contrib/mob_grinder.js ${SCRIPTCRAFT}/plugins/drone/contrib/mob_grinder.js
 ADD scriptcraft/plugins/drone/contrib/secure_home.js ${SCRIPTCRAFT}/plugins/drone/contrib/secure_home.js
 ADD scriptcraft/plugins/drone/contrib/subway.js ${SCRIPTCRAFT}/plugins/drone/contrib/subway.js
-ADD scriptcraft/plugins/greet.js ${SCRIPTCRAFT}/plugins/greet.js
 ADD scriptcraft/plugins/homes/homes.js ${SCRIPTCRAFT}/plugins/homes/homes.js
 ADD scriptcraft/plugins/inv.js ${SCRIPTCRAFT}/plugins/inv.js
-ADD scriptcraft/plugins/ravine.js ${SCRIPTCRAFT}/plugins/ravine.js
 ADD scriptcraft/plugins/tp_shield.js ${SCRIPTCRAFT}/plugins/tp_shield.js
 
 # run commands after dropping codebase

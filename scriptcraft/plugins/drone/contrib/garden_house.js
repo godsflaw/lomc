@@ -16,7 +16,7 @@ At the in-game prompt you can create a garden_house by looking at a block and
 typing:
 
 ```javascript
-/js garden_house()
+/jsp garden_house <wood_type>
 ```
 
 Alternatively you can create a new Drone object from a Player or Location
